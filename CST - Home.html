@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="sources/_icon." />
+    <script src="script.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="hdr">
+        <h1>C#Train</h1>
+        <a href="#">Тренировать слова</a>
+        <a href="#">Тренировать язык</a>
+        <a href="#">Новости</a>
+    </div>
+
+    <div id="info">
+        <div class="info-div">
+            <h1>Тренеруйте скорость и точность своего C#!</h1>
+            <div>Совершаете много ошибок когда пишете свой код? Пишите код так долго, что забываете, что писали? Вам нужно тренироваться! Этот сайт - хороший вариант для ваших тренировок</div>
+            <div style="display:flex; flex-direction:row; align-items:center;justify-content:center; padding:2%">
+                <button>Начать слова!</button>
+                <button>Начать тренировку!</button>
+            </div>
+        </div>
+
+        <div class="info-div">
+            <div>
+                Наш сайт сконцентрирован на исследовании синтаксиса и тренировки языка C#. Он поможет выучить весь синтаксис и развить вашу мышечную память
+            </div>
+            <img src="" alt="img1"/>
+        </div>
+        <div class="info-div">
+            <img src="" alt="img2" />
+            <div>
+                На этом сайте есть тренировка отдельных слов синтаксиса, чего нет на могих других подобных сайтов. Это очень удобно для тренировки сложных/нужных слов
+            </div>
+        </div>
+        <div class="info-div">
+            <div>
+
+            </div>
+            <img src="" alt="img3" />
+        </div>
+    </div>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
+
+        * {
+            margin: 0;
+            font-family: "Afacad Flux", system-ui;
+            transition:ease-in 0.2s;
+        }
+        body{
+            background:#550434;
+        }
+
+        #hdr {
+            background: linear-gradient(45deg, #cf1934, #bf17d2);
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            -justify-content: center;
+        }
+        #hdr a, h1{
+            padding: 30px;
+            text-decoration: none;
+            transition:ease-out 0.1s;
+                        color: white;
+        }
+
+        #hdr a::after hover{
+            color:#c51ed3;
+        }
+
+        #info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-div {
+            display: flex;
+            color: white;
+            padding: 5%;
+            background: linear-gradient(45deg, #cf193430, #bf17d230);
+            border-radius: 40px;
+            margin: 2% 0 2% 0;
+            width: 45%;
+        }
+        .info-div div{
+            padding:0 1% 0 0;
+            width:30%;
+        }
+        .info-div img{
+            padding:0 0 0 1%;
+            position:relative;
+        }
+        .info-div button{
+            color:white;
+            background:#ff0064;
+            border-radius:10px;
+            padding:10px;
+            margin:10px;
+            border: none;
+        }
+        .info-div button:hover{
+
+        }
+        .info-div:first-child{
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:none;
+            background: linear-gradient(45deg, #cf193470, #bf17d270);
+border-radius:40px;
+width:70%;
+        }
+        .info-div:first-child div{
+            font-size:large;
+            width:50%;
+                        text-align:center;
+        }
+    </style>
+</body>
+</html>
