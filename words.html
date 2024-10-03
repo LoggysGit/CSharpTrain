@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -285,16 +284,10 @@
 
         document.addEventListener('keydown', handleSpacePress);
 
-         function setWord(wordT) {
-     wordMark.innerText = wordT;
-     word = wordT;
-
-     isTrain = false;
-     errs = 0;
-     timerElement.textContent = '00:00';
-     settStr.innerText = "Остановлено | Ошибок: 0"; 
-     input.focus();
- }
+        function setWord(wordT) {
+            wordMark.innerText = wordT;
+            word = wordT;
+        }
 
         for (let i = 0; i < wordBtns.length; i++) {
             wordBtns[i].addEventListener('click', function (event) {
