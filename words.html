@@ -285,14 +285,16 @@
 
         document.addEventListener('keydown', handleSpacePress);
 
-        function setWord(wordT) {
-            wordMark.innerText = wordT;
-            word = wordT;
+         function setWord(wordT) {
+     wordMark.innerText = wordT;
+     word = wordT;
 
-            errs = 0;
-            timerElement.textContent = '00:00';
-            settStr.innerText = "Остановлено | Ошибок: 0"; 
-        }
+     isTrain = false;
+     errs = 0;
+     timerElement.textContent = '00:00';
+     settStr.innerText = "Остановлено | Ошибок: 0"; 
+     input.focus();
+ }
 
         for (let i = 0; i < wordBtns.length; i++) {
             wordBtns[i].addEventListener('click', function (event) {
