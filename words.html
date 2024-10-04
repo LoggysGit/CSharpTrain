@@ -21,7 +21,7 @@
             <div id="setts">
                 <p id="sett-str">Остановлено | Ошибок: 0</p>
 <p>Нажмите пробел для запуска</p>
-<button>Запустить<\button>
+<button id="start-btn">Запустить<\button>
             </div>
         </div>
         <table id="word-table">
@@ -193,6 +193,7 @@
         const wordMark = document.getElementById("custom-placeholder");
         const settStr = document.getElementById("sett-str");
         const timerElement = document.getElementById("timer");
+const startBtn = document.getElementById("start-btn");
 
         const wordBtns = document.getElementsByClassName("word-btn");
 
@@ -285,6 +286,7 @@
         });
 
         document.addEventListener('keydown', handleSpacePress);
+startBtn.addEventListener(`click`, hndleSpacePress);
 
         function setWord(wordT) {
             wordMark.innerText = wordT;
