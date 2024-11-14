@@ -44,13 +44,13 @@ async function generateValidURL() {
 }
 
 // Функция для обновления видео на странице
-function generate() {
+async function generate() {
   const iframe = document.getElementById('vid');
   const urlP = document.getElementById('url');
   
-  generateValidURL().then(newVideoUrl => {
-    const newVideoId = newVideoUrl.split('=')[1]; // Извлекаем видео ID из URL
-    iframe.src = `https://www.youtube.com/embed/${newVideoId}`;
-    urlP.textContent = newVideoUrl;
-  });
+  // Ждем результат от generateValidURL
+  const newVideoUrl = await generateValidURL();
+  const newVideoId = newVideoUrl.split('=')[1]; // Извлекаем видео ID из URL
+  iframe.src = `https://www.youtube.com/embed/${newVideoId}`;
+  urlP.textContent = newVideoUrl;
 }
