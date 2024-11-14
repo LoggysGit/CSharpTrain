@@ -40,3 +40,11 @@ function generateURL() {
 
   return `https://www.youtube.com/$password`; // Создаем пример URL
 }
+
+function generate(){
+  const iframe = document.getElementById('vid');
+  const urlP = document.getElementById('url');
+  newVideoId = generateValidURL()
+  iframe.src = `https://www.youtube.com/embed/${newVideoId}`;
+  urlP.textContent = newVideoId
+}
