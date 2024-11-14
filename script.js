@@ -1,3 +1,4 @@
+// Функция для проверки URL
 function checkURL(url) {
   return fetch(url, { method: 'GET' })
     .then(response => {
@@ -18,17 +19,7 @@ function checkURL(url) {
     });
 }
 
-function generateValidURL() {
-  let url = generateURL();
-  return checkURL(url).then(isValid => {
-    if (isValid) {
-      return url;
-    } else {
-      return generateValidURL(); // Рекурсивный вызов, если URL не существует
-    }
-  });
-}
-
+// Функция для генерации URL
 function generateURL() {
   const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890[]'/?><!#$%^&*()_+=-*}{`~";
   let password = "";
@@ -38,13 +29,28 @@ function generateURL() {
     password += charMass.charAt(index);
   }
 
-  return `https://www.youtube.com/$password`; // Создаем пример URL
+  return `https://www.youtube.com/watch?v=${password}`; // Генерируем правильный URL
 }
 
-function generate(){
+// Функция для генерации валидного URL
+async function generateValidURL() {
+  let url = generateURL();
+  const isValid = await checkURL(url);  // Ожидаем результат проверки
+  if (isValid) {
+    return url;
+  } else {
+    return generateValidURL(); // Рекурсивный вызов, если URL не существует
+  }
+}
+
+// Функция для обновления видео на странице
+function generate() {
   const iframe = document.getElementById('vid');
   const urlP = document.getElementById('url');
-  newVideoId = generateValidURL()
-  iframe.src = `https://www.youtube.com/embed/${newVideoId}`;
-  urlP.textContent = newVideoId
+  
+  generateValidURL().then(newVideoUrl => {
+    const newVideoId = newVideoUrl.split('=')[1]; // Извлекаем видео ID из URL
+    iframe.src = `https://www.youtube.com/embed/${newVideoId}`;
+    urlP.textContent = newVideoUrl;
+  });
 }
