@@ -1,58 +1,93 @@
-const API_KEY = 'AIzaSyCIo00gH_2R0OPKOErlWfePYNQRCOty_78'; // Замените на ваш ключ API
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random YouTube Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        iframe {
+            margin: 20px;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #777;
+        }
+        a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random YouTube Video</h1>
+    <iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+    <p>
+        <a id="video-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Open video in YouTube</a>
+    </p>
+    <button onclick="fetchRandomVideo()">Get Random Video</button>
 
-// Генерация случайного видео ID
-function generateURL() {
-    const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
-    let videoId = "";
+    <script>
+        const API_KEY = 'YOUR_YOUTUBE_API_KEY'; // Замените на ваш ключ API
+        const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
-    for (let i = 0; i < 11; i++) {
-        let index = Math.floor(Math.random() * charMass.length);
-        videoId += charMass.charAt(index);
-    }
-
-    return videoId; // Возвращает только ID видео
-}
-
-// Проверка существования видео с использованием YouTube Data API
-function checkURL(videoId) {
-    const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.items.length > 0) {
-                console.log("Video exist:", videoId);
-                return true;
-            } else {
-                console.log("Video does not exist:", videoId);
-                return false;
+        function getRandomQuery() {
+            const chars = "abcdefghijklmnopqrstuvwxyz";
+            let query = "";
+            for (let i = 0; i < 3; i++) {
+                query += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-        })
-        .catch(error => {
-            console.log("Error:", error);
-            return false;
-        });
-}
+            return query;
+        }
 
-// Рекурсивная проверка для генерации валидного видео URL
-async function generateValidURL() {
-    const videoId = generateURL();
-    const isValid = await checkURL(videoId);
+        async function fetchRandomVideo() {
+            const query = getRandomQuery();
+            const url = `${SEARCH_URL}?q=${query}&key=${API_KEY}&part=snippet&type=video&maxResults=1`;
 
-    if (isValid) {
-        return videoId;
-    } else {
-        return generateValidURL(); // Повторяем генерацию, если ID невалиден
-    }
-}
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-// Функция для обновления видео
-async function generate() {
-    const iframe = document.getElementById('vid');
-    const urlP = document.getElementById('url');
+                if (data.items && data.items.length > 0) {
+                    const videoId = data.items[0].id.videoId;
+                    updateVideo(videoId);
+                } else {
+                    console.log("No video found, trying again...");
+                    fetchRandomVideo();
+                }
+            } catch (error) {
+                console.error("Error fetching video:", error);
+            }
+        }
 
-    const videoId = await generateValidURL(); // Получение валидного ID видео
-    iframe.src = `https://www.youtube.com/embed/${videoId}`; // Обновление iframe
-    urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
-    urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; 
-}
+        function updateVideo(videoId) {
+            const iframe = document.getElementById('video');
+            const link = document.getElementById('video-link');
+
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            link.href = `https://www.youtube.com/watch?v=${videoId}`;
+            link.textContent = `https://www.youtube.com/watch?v=${videoId}`;
+        }
+    </script>
+</body>
+</html>
