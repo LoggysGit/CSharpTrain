@@ -73,7 +73,38 @@
         let videoList = []; // Массив для хранения найденных видео
         let videoIndex = 0; // Индекс текущего видео в массиве
 
-        // Функция для поиска видео по запросу
+function generateRequest() {
+    // Массив слов с разных языков Европы и Азии, включая добавленные казахские слова
+    let word_data = [
+        "bonjour", "hello", "hola", "ciao", "hallo", "olá", "merhaba", "안녕하세요", "こんにちは", "Привет", "नमस्ते", "你好", "สวัสดี", "здравствуйте", "שלום",
+        "сэлэм", "добрый", "thank", "merci", "gracias", "danke", "arigato", "obrigado", "saluton", "guten", "hola", "hej", "приветствие", "gamarjoba", "hejsan",
+        "xin chào", "bonsoir", "ai", "emre", "tashi delek", "namaste", "hola", "mingalaba", "selamat", "vaša", "स्वागत", "добре", "skål", "bonjourno",
+        "hola", "privet", "mir", "ama", "yahweh", "cześć", "howdy", "שלום", "こんにちは", "bonjour", "sup", "aloha", "tulivu", "maligayang", "स्वागत", "день",
+        "po dobranu", "me", "meow", "مبروك", "endereço", "litt", "great", "hjälp", "здарова", "konnichiwa", "mahalo", "vida", "дежавю", "fjärde", "Голя",
+        "yakun", "shukran", "felyk", "svar", "вечер", "иерусалим", "morning", "oscar", "हेलो", "salam", "tashi", "zend", "buenos", "konnichiwa", "tuvok",
+        "elma", "tserp", "merhaba", "cheque", "fiesta", "ko", "dinner", "вроде", "как", "lunch", "gate", "vraag", "zdravo", "милый", "lugar", "рассказ", 
+        "바나나", "cafe", "дом", "buka", "kise", "raptor", "hello", "hajime", "группа", "degul", "hassan", "hise", "россия", "faiz", "mbap", "se", "jüla",
+        "маяк", "break", "ryan", "bravo", "madam", "nikos", "terra", "просто", "student", "luz", "ella", "feliz", "отдых", "аргентинец", "mushahid", "nash", 
+        "chiles", "oficina", "res", "заказ", "noor", "movie", "merhaba", "caminos", "theory", "numbers", "vi", "chien", "jose", "neva", "hello", "nature",
+        "photo", "serge", "cultura", "berita", "estudios", "stop", "lesson", "fiesta", "muda", "benedik", "fratello", "gracias", "happy", "the", "goodbye", 
+        "motivation", "gracias", "gora", "barcelona", "juga", "dance", "valor", "true", "rezo", "led", "science", "piano", "hoge", "universal", "compas",
+        "new", "sevia", "espanol", "massege", "cat", "hello", "algebra", "serum", "work", "el", "in", "quiem", "home", "sun", "sur", "selena", "космос",
+        "serce", "zhuang", "moby", "agri", "forest", "cats", "te", "tours", "countries", "human", "language", "finish", "with", "without", "quimica", "speed",
+        "time", "math", "game", "hand", "pets", "human", "hacker", "hello", "grace", "waves", "labo", "giant", "computer", "past", "baba", "uzb", "studios",
+        "genesis", "compassion", "holiday", "bath", "pencil", "world", "piano", "research", "sun", "boss", "kinos", "soccer", "teacher", "star", "приключения",
+        "қолдану", "мектебіңіздің", "директорының", "үшін", "директордың", "оқушыларының", "құпиясөздері", "шарттың", "көрсетілген", "техникалық", "ерекшелігінде",
+        "поштаға", "жіберілді", "орынбасарларының", "мұғалімдері"
+    ];
+
+    // Генерация случайных индексов
+    let firstWordIndex = Math.floor(Math.random() * word_data.length);  // Случайный индекс для первого слова
+    let secondWordIndex = Math.floor(Math.random() * word_data.length); // Индекс второго слова
+
+    // Возвращаем строку, объединяя два случайных слова
+    return word_data[firstWordIndex] + " " + word_data[secondWordIndex];
+}
+
+
         function searchVideos(query) {
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10`;
 
@@ -81,7 +112,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.items && data.items.length > 0) {
-                        // Сохраняем ссылки на найденные видео
                         videoList = data.items.map(item => {
                             return {
                                 id: item.id.videoId,
@@ -113,14 +143,13 @@
             iframe.src = `https://www.youtube.com/embed/${currentVideo.id}`; // Обновление iframe
             urlP.href = currentVideo.url;
             urlP.textContent = currentVideo.url; // Отображение полного URL
-
-            videoIndex = (videoIndex + 1) % videoList.length; // Переключаемся на следующее видео
         }
 
         // Функция для начала нового поиска
         function startSearch(query) {
-            videoIndex = 0; // Сбрасываем индекс на начало
-            searchVideos(query).then(() => updateVideo()); // Ищем видео и показываем первое
+            videoIndex++; 
+            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query)} 
+            updateVideo();
         }
     </script>
 </head>
@@ -128,6 +157,6 @@
     <h1>Random YouTube Video!</h1>
     <iframe id="vid" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <a id="url" href="#">Video Link</a>
-    <button id="genURLBtn" onclick="startSearch('funny cat videos')">Generate new</button> <!-- Здесь можно заменить запрос -->
+    <button id="genURLBtn" onclick="startSearch(generateRequest())">Generate new</button> <!-- Здесь можно заменить запрос -->
 </body>
 </html>
