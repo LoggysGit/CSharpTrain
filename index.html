@@ -164,7 +164,7 @@ function generateRequest() {
                 return;
             }
 
-            const currentVideo = videoList[random(0, videoList.length)];
+            const currentVideo = videoList[Math.floor(Math.random() * videoList.length)];
             const iframe = document.getElementById('vid');
             const urlP = document.getElementById('url');
 
