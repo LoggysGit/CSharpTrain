@@ -70,68 +70,64 @@
     <script>
         const API_KEY = 'AIzaSyBWirjPQcXPjnMhx4lWCJX4QBd01E0wseU'; // Замените на ваш ключ API
 
-        // Генерация случайного видео ID
-        function generateURL() {
-            const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
-            let videoId = "";
+        let videoList = []; // Массив для хранения найденных видео
+        let videoIndex = 0; // Индекс текущего видео в массиве
 
-            for (let i = 0; i < 11; i++) {
-                let index = Math.floor(Math.random() * charMass.length);
-                videoId += charMass.charAt(index);
-            }
-
-            return videoId; // Возвращает только ID видео
-        }
-
-        // Проверка существования видео с использованием YouTube Data API
-        function checkURL(videoId) {
-            const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
+        // Функция для поиска видео по запросу
+        function searchVideos(query) {
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10`;
 
             return fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.items.length > 0) {
-                        console.log("Video exists:", videoId);
-                        return true;
+                    if (data.items && data.items.length > 0) {
+                        // Сохраняем ссылки на найденные видео
+                        videoList = data.items.map(item => {
+                            return {
+                                id: item.id.videoId,
+                                url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+                                title: item.snippet.title
+                            };
+                        });
+                        console.log("Videos found:", videoList);
                     } else {
-                        console.log("Video does not exist:", videoId);
-                        return false;
+                        console.log("No videos found.");
                     }
                 })
                 .catch(error => {
                     console.log("Error:", error);
-                    return false;
                 });
         }
 
-        // Рекурсивная проверка для генерации валидного видео URL
-        async function generateValidURL() {
-            const videoId = generateURL();
-            const isValid = await checkURL(videoId);
-
-            if (isValid) {
-                return videoId;
-            } else {
-                return generateValidURL(); // Повторяем генерацию, если ID невалиден
-            }
-        }
-
         // Функция для обновления видео
-        async function generate() {
+        function updateVideo() {
+            if (videoList.length === 0) {
+                alert("No more videos. Please start a new search.");
+                return;
+            }
+
+            const currentVideo = videoList[videoIndex];
             const iframe = document.getElementById('vid');
             const urlP = document.getElementById('url');
 
-            const videoId = await generateValidURL(); // Получение валидного ID видео
-            iframe.src = `https://www.youtube.com/embed/${videoId}`; // Обновление iframe
-            urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
-            urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; // Отображение полного URL
+            iframe.src = `https://www.youtube.com/embed/${currentVideo.id}`; // Обновление iframe
+            urlP.href = currentVideo.url;
+            urlP.textContent = currentVideo.url; // Отображение полного URL
+
+            videoIndex = (videoIndex + 1) % videoList.length; // Переключаемся на следующее видео
+        }
+
+        // Функция для начала нового поиска
+        function startSearch(query) {
+            videoIndex = 0; // Сбрасываем индекс на начало
+            searchVideos(query).then(() => updateVideo()); // Ищем видео и показываем первое
         }
     </script>
 </head>
 <body>
-    <h1>Random Video from YouTube!</h1>
+    <h1>Random YouTube Video!</h1>
     <iframe id="vid" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    <a id="url" href="">Video Link</a>
-    <button id="genURLBtn" onclick="generate()">Generate new</button>
+    <a id="url" href="#">Video Link</a>
+    <button id="genURLBtn" onclick="startSearch('funny cat videos')">Generate new</button> <!-- Здесь можно заменить запрос -->
 </body>
 </html>
