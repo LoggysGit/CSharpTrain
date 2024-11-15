@@ -73,6 +73,8 @@
         let videoList = []; // Массив для хранения найденных видео
         let videoIndex = 0; // Индекс текущего видео в массиве
 
+        const request = document.getElementById('req')
+
 function generateRequest() {
     // Массив слов с разных языков Европы и Азии, включая добавленные казахские слова
     let word_data = [
@@ -100,13 +102,16 @@ function generateRequest() {
     let firstWordIndex = Math.floor(Math.random() * word_data.length);  // Случайный индекс для первого слова
     let secondWordIndex = Math.floor(Math.random() * word_data.length); // Индекс второго слова
 
+
     // Возвращаем строку, объединяя два случайных слова
-    return word_data[firstWordIndex] + " " + word_data[secondWordIndex];
+    if(req.value.trim() === "") return word_data[firstWordIndex] + " " + word_data[secondWordIndex];
+    else return req.value
 }
 
 
         function searchVideos(query) {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10`;
+            pageToken = random(1, 10)
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10&pageToken=${pageToken}&type=video`;
 
             return fetch(url)
                 .then(response => response.json())
@@ -136,7 +141,7 @@ function generateRequest() {
                 return;
             }
 
-            const currentVideo = videoList[videoIndex];
+            const currentVideo = videoList[random(0, videoList.length)];
             const iframe = document.getElementById('vid');
             const urlP = document.getElementById('url');
 
@@ -148,7 +153,7 @@ function generateRequest() {
         // Функция для начала нового поиска
         function startSearch(query) {
             videoIndex++; 
-            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query)} 
+            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query); await new Promise(resolve => setTimeout(resolve, 1000));} 
             updateVideo();
         }
     </script>
