@@ -164,7 +164,9 @@ function generateRequest() {
                 return;
             }
 
-            const currentVideo = videoList[Math.floor(Math.random() * videoList.length)];
+            let i = Math.floor(Math.random() * videoList.length)
+            const currentVideo = videoList[i];
+            delete videoList[i]
             const iframe = document.getElementById('vid');
             const urlP = document.getElementById('url');
 
@@ -176,7 +178,7 @@ function generateRequest() {
         // Функция для начала нового поиска
         function startSearch(query) {
             videoIndex++; 
-            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query);} 
+            if(videoList.length == 0){videoIndex = 0; videoList.length = 0; searchVideos(query);} 
             updateVideo();
         }
     </script>
