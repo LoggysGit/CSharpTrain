@@ -54,5 +54,5 @@ async function generate() {
     const videoId = await generateValidURL(); // Получение валидного ID видео
     iframe.src = `https://www.youtube.com/embed/${videoId}`; // Обновление iframe
     urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
-    urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; // Отображение полного URL
+    urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; 
 }
