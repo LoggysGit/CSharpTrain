@@ -97,6 +97,8 @@
             const iframe = document.getElementById('vid');
             const urlP = document.getElementById('url');
 
+            console.log("Generate...")
+
             const videoId = await generateValidURL();
             iframe.src = `https://www.youtube.com/embed/${videoId}`;
             urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
