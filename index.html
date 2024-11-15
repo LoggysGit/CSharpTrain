@@ -1,115 +1,111 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="shortcut icon" href="_icon.png" />
-    <script src="script.js"></script>
-    <title>Random Youtube Video</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="_icon.png">
+    <script src="script.js" defer></script>
+    <title>Random YouTube Video</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+        * {
+            font-family: "Montserrat", sans-serif;
+            color: white;
+            padding: 10px;
+            transition: ease 0.5s;
+        }
+
+        body {
+            background: linear-gradient(45deg, #565656, #666666);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #vid {
+            box-shadow: -0px -0px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #genURLBtn {
+            border: none;
+            background: #888888;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        #genURLBtn:hover {
+            background: #AAAAAA;
+            transform: scale(1.1);
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Random video from YT!</h1>
-    <iframe id="vid" width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <h1>Random Video from YouTube!</h1>
+    <iframe id="vid" width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+    </iframe>
     <a id="url" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>
-    <button id="genURLBtn" onclick="generate()">Generate new</button>
+    <button id="genURLBtn" onclick="generate()">Generate New</button>
 
-    <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ruda:wght@400..900&display=swap');
+    <script>
+        const API_KEY = 'AIzaSyCIo00gH_2R0OPKOErlWfePYNQRCOty_78'; 
 
-* {
-    font-family: "Montserrat", sans-serif;
-    color: white;
-    padding: 10px;
-    transition:ease 0.5s;
-}
+        function generateURL() {
+            const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+            let videoId = "";
 
-body {
-    background: linear-gradient(45deg, #565656, #666666);
-    background-repeat: no-repeat; 
-    background-attachment: fixed; 
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column
-}
-
-#vid {
-    box-shadow: -0px -0px 15px rgba(0, 0, 0, 0.2);
-}
-
-#genURLBtn{
-    border:none;
-    background:#888888;
-    border-radius:15px;
-}
-
-#genURLBtn:hover {
-    background: #AAAAAA;
-    transform:scale(1.1);
-}</style>
-
-    <script>const API_KEY = 'AIzaSyCIo00gH_2R0OPKOErlWfePYNQRCOty_78'; // Замените на ваш ключ API
-
-// Генерация случайного видео ID
-function generateURL() {
-    const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
-    let videoId = "";
-
-    for (let i = 0; i < 11; i++) {
-        let index = Math.floor(Math.random() * charMass.length);
-        videoId += charMass.charAt(index);
-    }
-
-    return videoId; // Возвращает только ID видео
-}
-
-// Проверка существования видео с использованием YouTube Data API
-function checkURL(videoId) {
-    const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.items.length > 0) {
-                console.log("Video exist:", videoId);
-                return true;
-            } else {
-                console.log("Video does not exist:", videoId);
-                return false;
+            for (let i = 0; i < 11; i++) {
+                let index = Math.floor(Math.random() * charMass.length);
+                videoId += charMass.charAt(index);
             }
-        })
-        .catch(error => {
-            console.log("Error:", error);
-            return false;
-        });
-}
 
-// Рекурсивная проверка для генерации валидного видео URL
-async function generateValidURL() {
-    const videoId = generateURL();
-    const isValid = await checkURL(videoId);
+            return videoId;
+        }
 
-    if (isValid) {
-        return videoId;
-    } else {
-        return generateValidURL(); // Повторяем генерацию, если ID невалиден
-    }
-}
+        function checkURL(videoId) {
+            const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
 
-// Функция для обновления видео
-async function generate() {
-    const iframe = document.getElementById('vid');
-    const urlP = document.getElementById('url');
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => data.items.length > 0)
+                .catch(() => false);
+        }
 
-    const videoId = await generateValidURL(); // Получение валидного ID видео
-    iframe.src = `https://www.youtube.com/embed/${videoId}`; // Обновление iframe
-    urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
-    urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; // Отображение полного URL
-}
-</script>
+        async function generateValidURL() {
+            const videoId = generateURL();
+            const isValid = await checkURL(videoId);
+
+            return isValid ? videoId : generateValidURL();
+        }
+
+        async function generate() {
+            const iframe = document.getElementById('vid');
+            const urlP = document.getElementById('url');
+
+            const videoId = await generateValidURL();
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
+            urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`;
+        }
+    </script>
 </body>
 </html>
+
 
 <!--div id="hdr">
         <h1>C#Train</h1>
