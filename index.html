@@ -78,25 +78,48 @@
 function generateRequest() {
     // Массив слов с разных языков Европы и Азии, включая добавленные казахские слова
     let word_data = [
-        "bonjour", "hello", "hola", "ciao", "hallo", "olá", "merhaba", "안녕하세요", "こんにちは", "Привет", "नमस्ते", "你好", "สวัสดี", "здравствуйте", "שלום",
-        "сэлэм", "добрый", "thank", "merci", "gracias", "danke", "arigato", "obrigado", "saluton", "guten", "hola", "hej", "приветствие", "gamarjoba", "hejsan",
-        "xin chào", "bonsoir", "ai", "emre", "tashi delek", "namaste", "hola", "mingalaba", "selamat", "vaša", "स्वागत", "добре", "skål", "bonjourno",
-        "hola", "privet", "mir", "ama", "yahweh", "cześć", "howdy", "שלום", "こんにちは", "bonjour", "sup", "aloha", "tulivu", "maligayang", "स्वागत", "день",
-        "po dobranu", "me", "meow", "مبروك", "endereço", "litt", "great", "hjälp", "здарова", "konnichiwa", "mahalo", "vida", "дежавю", "fjärde", "Голя",
-        "yakun", "shukran", "felyk", "svar", "вечер", "иерусалим", "morning", "oscar", "हेलो", "salam", "tashi", "zend", "buenos", "konnichiwa", "tuvok",
-        "elma", "tserp", "merhaba", "cheque", "fiesta", "ko", "dinner", "вроде", "как", "lunch", "gate", "vraag", "zdravo", "милый", "lugar", "рассказ", 
-        "바나나", "cafe", "дом", "buka", "kise", "raptor", "hello", "hajime", "группа", "degul", "hassan", "hise", "россия", "faiz", "mbap", "se", "jüla",
-        "маяк", "break", "ryan", "bravo", "madam", "nikos", "terra", "просто", "student", "luz", "ella", "feliz", "отдых", "аргентинец", "mushahid", "nash", 
-        "chiles", "oficina", "res", "заказ", "noor", "movie", "merhaba", "caminos", "theory", "numbers", "vi", "chien", "jose", "neva", "hello", "nature",
-        "photo", "serge", "cultura", "berita", "estudios", "stop", "lesson", "fiesta", "muda", "benedik", "fratello", "gracias", "happy", "the", "goodbye", 
-        "motivation", "gracias", "gora", "barcelona", "juga", "dance", "valor", "true", "rezo", "led", "science", "piano", "hoge", "universal", "compas",
-        "new", "sevia", "espanol", "massege", "cat", "hello", "algebra", "serum", "work", "el", "in", "quiem", "home", "sun", "sur", "selena", "космос",
-        "serce", "zhuang", "moby", "agri", "forest", "cats", "te", "tours", "countries", "human", "language", "finish", "with", "without", "quimica", "speed",
-        "time", "math", "game", "hand", "pets", "human", "hacker", "hello", "grace", "waves", "labo", "giant", "computer", "past", "baba", "uzb", "studios",
-        "genesis", "compassion", "holiday", "bath", "pencil", "world", "piano", "research", "sun", "boss", "kinos", "soccer", "teacher", "star", "приключения",
-        "қолдану", "мектебіңіздің", "директорының", "үшін", "директордың", "оқушыларының", "құпиясөздері", "шарттың", "көрсетілген", "техникалық", "ерекшелігінде",
-        "поштаға", "жіберілді", "орынбасарларының", "мұғалімдері"
+    // Положительные абстракции
+    "свобода", "мир", "дружба", "любовь", "надежда", "спокойствие", "радость", "гармония", "благополучие", "оптимизм",
+    "justice", "harmony", "friendship", "freedom", "hope", "courage", "wisdom", "success", "inspiration", "compassion",
+    "평화", "행복", "희망", "우정", "조화", "용기", "지혜", "사랑", "성공", "미래",
+    
+    // Негативные абстракции
+    "страх", "гнев", "зависть", "печаль", "тревога", "ненависть", "разочарование", "хаос", "горе", "одиночество",
+    "fear", "anger", "envy", "sadness", "anxiety", "hatred", "despair", "chaos", "grief", "isolation",
+    "恐惧", "愤怒", "嫉妒", "悲伤", "焦虑", "仇恨", "绝望", "混乱", "孤独", "悲痛",
+    
+    // Действия и состояния
+    "борьба", "победа", "поражение", "путешествие", "учеба", "работа", "творчество", "отдых", "развитие", "исследование",
+    "fight", "win", "loss", "travel", "study", "work", "create", "relax", "grow", "discover",
+    "战斗", "胜利", "失败", "旅行", "学习", "工作", "创造", "放松", "成长", "探索",
+    "размышление", "рассуждение", "анализ", "перспектива", "процесс", "ускорение", "замедление", "восстановление", "прогресс", "стагнация",
+    
+    // Природа и окружение
+    "океан", "лес", "пустыня", "горы", "река", "небо", "пейзаж", "остров", "водопад", "поляна",
+    "ocean", "forest", "desert", "mountain", "river", "sky", "landscape", "island", "waterfall", "meadow",
+    "바다", "숲", "사막", "산", "강", "하늘", "풍경", "섬", "폭포", "초원",
+    
+    // Предметы и технологии
+    "компьютер", "смартфон", "робот", "интернет", "планшет", "телескоп", "микроскоп", "радар", "автомобиль", "ракета",
+    "computer", "smartphone", "robot", "internet", "tablet", "telescope", "microscope", "radar", "car", "rocket",
+    "计算机", "智能手机", "机器人", "互联网", "平板电脑", "望远镜", "显微镜", "雷达", "汽车", "火箭",
+    
+    // Эмоции
+    "радость", "грусть", "удивление", "страх", "злость", "восторг", "тоска", "смех", "огорчение", "разочарование",
+    "joy", "sadness", "surprise", "fear", "anger", "delight", "melancholy", "laughter", "grief", "disappointment",
+    "喜悦", "悲伤", "惊讶", "恐惧", "愤怒", "欣喜", "忧郁", "笑声", "痛苦", "失望",
+    
+    // Концепции и явления
+    "время", "вечность", "пространство", "свет", "темнота", "энергия", "гравитация", "волна", "часы", "течение",
+    "time", "eternity", "space", "light", "darkness", "energy", "gravity", "wave", "clock", "flow",
+    "时间", "永恒", "空间", "光", "黑暗", "能量", "重力", "波", "时钟", "流动",
+    
+    // Рандомные слова и понятия
+    "кафе", "город", "улыбка", "подарок", "игра", "выбор", "история", "мост", "поезд", "улица",
+    "cafe", "city", "smile", "gift", "game", "choice", "history", "bridge", "train", "street",
+    "咖啡馆", "城市", "微笑", "礼物", "游戏", "选择", "历史", "桥", "火车", "街道"
     ];
+
 
     // Генерация случайных индексов
     let firstWordIndex = Math.floor(Math.random() * word_data.length);  // Случайный индекс для первого слова
@@ -104,6 +127,7 @@ function generateRequest() {
 
 
     // Возвращаем строку, объединяя два случайных слова
+    console.log(req.value)
     if(req.value.trim() === "") return word_data[firstWordIndex] + " " + word_data[secondWordIndex];
     else return req.value
 }
@@ -153,7 +177,7 @@ function generateRequest() {
         // Функция для начала нового поиска
         function startSearch(query) {
             videoIndex++; 
-            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query); await new Promise(resolve => setTimeout(resolve, 1000));} 
+            if(videoIndex >= videoList.length){videoIndex = 0; videoList.length = 0; searchVideos(query);} 
             updateVideo();
         }
     </script>
