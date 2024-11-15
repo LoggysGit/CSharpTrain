@@ -4,8 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random YouTube Video</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ruda:wght@400..900&display=swap');
+
+        * {
+            font-family: "Montserrat", sans-serif;
+            color: white;
+            padding: 10px;
+            margin: 0;
+            box-sizing: border-box;
+            transition: ease 0.3s;
+        }
+
+        body {
+            background: linear-gradient(45deg, #565656, #666666);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        iframe {
+            box-shadow: -0px -0px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        #url {
+            display: block;
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #url:hover {
+            color: #ff9800;
+        }
+
+        #genURLBtn {
+            border: none;
+            background: #888888;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        #genURLBtn:hover {
+            background: #AAAAAA;
+            transform: scale(1.1);
+        }
+    </style>
     <script>
-        const API_KEY = 'AIzaSyCIo00gH_2R0OPKOErlWfePYNQRCOty_78'; // Замените на ваш ключ API
+        const API_KEY = 'AIzaSyBWirjPQcXPjnMhx4lWCJX4QBd01E0wseU'; // Замените на ваш ключ API
 
         // Генерация случайного видео ID
         function generateURL() {
