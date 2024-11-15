@@ -134,7 +134,7 @@ function generateRequest() {
 
 
         function searchVideos(query) {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${API_KEY}&maxResults=10&type=video`;
 
             return fetch(url)
                 .then(response => response.json())
@@ -173,6 +173,8 @@ function generateRequest() {
             iframe.src = `https://www.youtube.com/embed/${currentVideo.id}`; // Обновление iframe
             urlP.href = currentVideo.url;
             urlP.textContent = currentVideo.url; // Отображение полного URL
+
+            req.placeholder="request${videoIndex}"
         }
 
         // Функция для начала нового поиска
