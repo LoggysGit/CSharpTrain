@@ -178,7 +178,7 @@ function generateRequest() {
         // Функция для начала нового поиска
         function startSearch(query) {
             videoIndex++; 
-            if(videoList.length == 0){videoIndex = 0; videoList.length = 0; searchVideos(query);} 
+            if(videoList.length == 0 | videoIndex >= 10){videoIndex = 0; videoList.length = 0; searchVideos(query);} 
             updateVideo();
         }
     </script>
