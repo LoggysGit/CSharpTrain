@@ -4,90 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random YouTube Video</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        iframe {
-            margin: 20px;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #555;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #777;
-        }
-        a {
-            color: #1e90ff;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-    <h1>Random YouTube Video</h1>
-    <iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-    <p>
-        <a id="video-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Open video in YouTube</a>
-    </p>
-    <button onclick="fetchRandomVideo()">Get Random Video</button>
-
     <script>
         const API_KEY = 'AIzaSyCIo00gH_2R0OPKOErlWfePYNQRCOty_78'; // Замените на ваш ключ API
-        const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
-        function getRandomQuery() {
-            const chars = "abcdefghijklmnopqrstuvwxyz";
-            let query = "";
-            for (let i = 0; i < 3; i++) {
-                query += chars.charAt(Math.floor(Math.random() * chars.length));
+        // Генерация случайного видео ID
+        function generateURL() {
+            const charMass = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+            let videoId = "";
+
+            for (let i = 0; i < 11; i++) {
+                let index = Math.floor(Math.random() * charMass.length);
+                videoId += charMass.charAt(index);
             }
-            return query;
+
+            return videoId; // Возвращает только ID видео
         }
 
-        async function fetchRandomVideo() {
-            const query = getRandomQuery();
-            const url = `${SEARCH_URL}?q=${query}&key=${API_KEY}&part=snippet&type=video&maxResults=1`;
+        // Проверка существования видео с использованием YouTube Data API
+        function checkURL(videoId) {
+            const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`;
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items.length > 0) {
+                        console.log("Video exists:", videoId);
+                        return true;
+                    } else {
+                        console.log("Video does not exist:", videoId);
+                        return false;
+                    }
+                })
+                .catch(error => {
+                    console.log("Error:", error);
+                    return false;
+                });
+        }
 
-                if (data.items && data.items.length > 0) {
-                    const videoId = data.items[0].id.videoId;
-                    updateVideo(videoId);
-                } else {
-                    console.log("No video found, trying again...");
-                    fetchRandomVideo();
-                }
-            } catch (error) {
-                console.error("Error fetching video:", error);
+        // Рекурсивная проверка для генерации валидного видео URL
+        async function generateValidURL() {
+            const videoId = generateURL();
+            const isValid = await checkURL(videoId);
+
+            if (isValid) {
+                return videoId;
+            } else {
+                return generateValidURL(); // Повторяем генерацию, если ID невалиден
             }
         }
 
-        function updateVideo(videoId) {
-            const iframe = document.getElementById('video');
-            const link = document.getElementById('video-link');
+        // Функция для обновления видео
+        async function generate() {
+            const iframe = document.getElementById('vid');
+            const urlP = document.getElementById('url');
 
-            iframe.src = `https://www.youtube.com/embed/${videoId}`;
-            link.href = `https://www.youtube.com/watch?v=${videoId}`;
-            link.textContent = `https://www.youtube.com/watch?v=${videoId}`;
+            const videoId = await generateValidURL(); // Получение валидного ID видео
+            iframe.src = `https://www.youtube.com/embed/${videoId}`; // Обновление iframe
+            urlP.href = `https://www.youtube.com/watch?v=${videoId}`;
+            urlP.textContent = `https://www.youtube.com/watch?v=${videoId}`; // Отображение полного URL
         }
     </script>
+</head>
+<body>
+    <h1>Random Video from YouTube!</h1>
+    <iframe id="vid" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <a id="url" href="">Video Link</a>
+    <button id="genURLBtn" onclick="generate()">Generate new</button>
 </body>
 </html>
